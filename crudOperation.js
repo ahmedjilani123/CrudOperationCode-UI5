@@ -46,93 +46,98 @@ sap.ui.define([
 
         Operation:function(mainObject){
             BusyIndicator.show();
-
-            const {payload,method,entitySet,mainModel,controller,filters, expand}= mainObject;
-
-            const oDataParams = {};
-            if (filters && Array.isArray(filters) && filters.length > 0) {
-                oDataParams.filters = filters;
-            }
-            if (expand && typeof expand === 'string' && expand.trim() !== "") {
-                oDataParams.urlParameters = {
-                    "$expand": expand
-                };
-            }
-            const models = (mainModel?.trim()?.includes("")) ? controller.getView().getModel() : controller.getView().getModel(mainModel);
             return new Promise((resolve,reject)=>{
-                if(method.toLowerCase() === "get"){
-                    try {
-                        models.read(`/${entitySet}`,{
-                            ...oDataParams,
-                            success:function(data,response){
-                                resolve(data,response);
-                                BusyIndicator.hide();
-                            },
-                            error:function(err){
-                                reject(err);
-                                BusyIndicator.hide();
-                            }
-                        })
-                    } catch (error) {
-                        reject(error);
+                try {
+                    if(mainObject === undefined || Object.keys(mainObject).length == 0) throw 'Object is Empty';
+                    const {payload,method,entitySet,mainModel,controller,filters, expand}= mainObject;
+                    const models = (mainModel?.trim()?.includes("")) ? controller.getView().getModel() : controller.getView().getModel(mainModel);
+                    const oDataParams = {};
+                    if (filters && Array.isArray(filters) && filters.length > 0) {
+                        oDataParams.filters = filters;
                     }
-                   
-                }
-                if(method.toLowerCase() === "post"){
-                    try {
-                        models.create(`/${entitySet}`,payload,{
-                            ...oDataParams,
-                            success:function(data,response){
-                                BusyIndicator.hide();
-                                resolve(data,response);
-                            },
-                            error:function(err){
-                                BusyIndicator.hide();
-                                reject(err);
-                            }
-                        }) 
-                    } catch (error) {
-                        reject(error);
+                    if (expand && typeof expand === 'string' && expand.trim() !== "") {
+                        oDataParams.urlParameters = {
+                            "$expand": expand
+                        };
                     }
-                    
-                }
-                if(method.toLowerCase() === "delete"){
-                    try {
-                         if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
-                         models.remove(`/${entitySet}`,{
-                            ...oDataParams,
-                            success:function(data,response){
-                                BusyIndicator.hide();
-                                resolve(data,response);
-                            },
-                            error:function(err){
-                                BusyIndicator.hide();
-                                reject(err);
-                            }
-                        })
-                    } catch (error) {
-                        reject(error);
+                    if(method.toLowerCase() === "get"){
+                        try {
+                            models.read(`/${entitySet}`,{
+                                ...oDataParams,
+                                success:function(data,response){
+                                    resolve(data,response);
+                                    BusyIndicator.hide();
+                                },
+                                error:function(err){
+                                    reject(err);
+                                    BusyIndicator.hide();
+                                }
+                            })
+                        } catch (error) {
+                            reject(error);
+                        }
+                       
                     }
-                    
-                }
-                if(method.toLowerCase() === "put"){
-                    try {
-                        if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
-                        models.update(`/${entitySet}`,payload,{
-                            ...oDataParams,
-                            success:function(data,response){
-                                BusyIndicator.hide();
-                                resolve(data,response);
-                            },
-                            error:function(err){
-                                BusyIndicator.hide();
-                                reject(err);
-                            }
-                        })
-                    } catch (error) {
-                        reject(error);
+                    if(method.toLowerCase() === "post"){
+                        try {
+                            models.create(`/${entitySet}`,payload,{
+                                ...oDataParams,
+                                success:function(data,response){
+                                    BusyIndicator.hide();
+                                    resolve(data,response);
+                                },
+                                error:function(err){
+                                    BusyIndicator.hide();
+                                    reject(err);
+                                }
+                            }) 
+                        } catch (error) {
+                            reject(error);
+                        }
+                        
                     }
-                   
+                    if(method.toLowerCase() === "delete"){
+                        try {
+                             if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
+                             models.remove(`/${entitySet}`,{
+                                ...oDataParams,
+                                success:function(data,response){
+                                    BusyIndicator.hide();
+                                    resolve(data,response);
+                                },
+                                error:function(err){
+                                    BusyIndicator.hide();
+                                    reject(err);
+                                }
+                            })
+                        } catch (error) {
+                            reject(error);
+                        }
+                        
+                    }
+                    if(method.toLowerCase() === "put"){
+                        try {
+                            if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
+                            models.update(`/${entitySet}`,payload,{
+                                ...oDataParams,
+                                success:function(data,response){
+                                    BusyIndicator.hide();
+                                    resolve(data,response);
+                                },
+                                error:function(err){
+                                    BusyIndicator.hide();
+                                    reject(err);
+                                }
+                            })
+                        } catch (error) {   //optional error
+                            reject(error);
+                        }
+                       
+                    }
+
+                } catch (error) {
+                    reject(error);
+                    BusyIndicator.hide();
                 }
                
             })
