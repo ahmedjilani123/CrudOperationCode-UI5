@@ -6,11 +6,11 @@ sap.ui.define([
         Operation:function(mainObject){
             BusyIndicator.show();
             const {payload,method,entitySet,mainModel,controller}= mainObject;
-            
+            const models = (mainModel?.trim()?.includes("")) ? controller.getView().getModel() : controller.getView().getModel(mainModel);
             return new Promise((resolve,reject)=>{
                 if(method.toLowerCase() === "get"){
                     try {
-                        controller.getView().getModel(mainModel).read(`/${entitySet}`,{
+                        models.read(`/${entitySet}`,{
                             success:function(data,response){
                                 resolve(data,response);
                                 BusyIndicator.hide();
@@ -27,7 +27,7 @@ sap.ui.define([
                 }
                 if(method.toLowerCase() === "post"){
                     try {
-                        controller.getView().getModel(mainModel).create(`/${entitySet}`,payload,{
+                        models.create(`/${entitySet}`,payload,{
                             success:function(data,response){
                                 BusyIndicator.hide();
                                 resolve(data,response);
@@ -45,7 +45,7 @@ sap.ui.define([
                 if(method.toLowerCase() === "delete"){
                     try {
                          if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
-                        controller.getView().getModel(mainModel).remove(`/${entitySet}`,{
+                         models.remove(`/${entitySet}`,{
                             success:function(data,response){
                                 BusyIndicator.hide();
                                 resolve(data,response);
@@ -63,7 +63,7 @@ sap.ui.define([
                 if(method.toLowerCase() === "put"){
                     try {
                         if(!entitySet.includes("(") && !entitySet.includes(")")) throw 'Pass Primary Key'
-                        controller.getView().getModel(mainModel).update(`/${entitySet}`,payload,{
+                        models.update(`/${entitySet}`,payload,{
                             success:function(data,response){
                                 BusyIndicator.hide();
                                 resolve(data,response);

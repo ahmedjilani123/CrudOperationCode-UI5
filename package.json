@@ -1,0 +1,11 @@
+{
+  "name": "crudoperationcode-ui5",
+  "version": "1.0.0",
+  "description": "TASK",
+  "main": "crudOperation.js",
+  "scripts": {
+    "test": "node crudOperation.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
