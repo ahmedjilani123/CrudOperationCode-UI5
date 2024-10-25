@@ -21,24 +21,12 @@ sap.ui.define([
          * // Example usage for a GET request with filters and expand
          * operationObj.Operation({
          *     method: "get",
-         *     entitySet: "Products",
-         *     mainModel: "myModel",
+         *     entitySet: "Products"  - metadata entity set,
+         *     mainModel: "myModel"    - the main model Name for manifest.json file,
          *     controller: this,
-         *     filters: [new sap.ui.model.Filter("Category", sap.ui.model.FilterOperator.EQ, "Electronics")],
-         *     expand: "Category/Details"
-         * });
-         * 
-         * @example
-         * // Example usage for a POST request
-         * operationObj.Operation({
-         *     method: "post",
-         *     entitySet: "Products",
-         *     mainModel: "myModel",
-         *     controller: this,
-         *     payload: {
-         *         ProductName: "New Product",
-         *         Category: "Electronics"
-         *     }
+         *     filters: [],
+         *     expand: "Category",
+         *     payload: {}
          * });
          */
 
